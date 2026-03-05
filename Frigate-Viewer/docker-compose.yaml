@@ -1,0 +1,26 @@
+services:
+  frigate:
+    container_name: frigate
+    privileged: true # Required for access to hardware acceleration and USB devices
+    restart: unless-stopped
+    image: ghcr.io/blakeblackshear/frigate:stable
+    shm_size: "128mb" # Standard for a few cameras; increase if using many high-res streams
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128 # Maps Intel GPU for HW acceleration
+      # - /dev/bus/usb:/dev/bus/usb # Uncomment if using a Coral USB Accelerator
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./config:/config
+      - ./storage:/media/frigate
+      - type: tmpfs # Reduces disk wear by using RAM for recordings cache
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    ports:
+      - "8971:8971" # Web UI (HTTPS)
+      - "5000:5000" # Web UI (HTTP)
+      - "8554:8554" # RTSP feeds
+      - "8555:8555" # WebRTC
+      - "8555:8555/udp" # WebRTC
+    environment:
+      FRIGATE_RTSP_PASSWORD: "password"

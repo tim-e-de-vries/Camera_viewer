@@ -1,0 +1,4 @@
+Frigate-Viewer/storage/*
+Frigate-Viewer/.* 
+MQTT/data/*
+MQTT/logs/*

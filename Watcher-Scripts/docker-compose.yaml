@@ -1,0 +1,12 @@
+services:
+  frigate-listener:
+    build: .
+    container_name: frigate-listener
+    restart: unless-stopped
+    environment:
+      - MQTT_HOST=hp-archlinux-laptop.lan
+      - FRIGATE_HOST=hp-archlinux-laptop.lan
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    # If using SCP to move files, you may need to mount your SSH keys
+    # - ~/.ssh:/root/.ssh:ro
