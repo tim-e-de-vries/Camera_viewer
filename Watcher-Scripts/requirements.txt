@@ -1,2 +1,4 @@
 paho-mqtt
 requests
+google-cloud-storage
+dotenv

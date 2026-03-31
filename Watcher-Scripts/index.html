@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GCS Video Player</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #f4f4f9;
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            padding-top: 50px;
+            margin: 0; 
+        }
+        .player-container { 
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 90%;
+            text-align: center;
+        }
+        video { 
+            width: 100%; 
+            border-radius: 8px; 
+            background: #000;
+        }
+        h2 { color: #333; margin-bottom: 20px; }
+        .error { color: #d93025; font-weight: bold; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="player-container">
+        <h2 id="video-title">Select a Video</h2>
+        
+        <video id="video-player" controls autoplay muted>
+            <source id="video-source" src="" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <p id="error-message" class="error" style="display: none;"></p>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const fileName = urlParams.get('file');
+
+        const videoPlayer = document.getElementById('video-player');
+        const videoSource = document.getElementById('video-source');
+        const videoTitle = document.getElementById('video-title');
+
+        if (fileName) {
+            videoTitle.textContent = "Playing: " + fileName;
+            
+            // Dynamically build the absolute path to the bucket
+            // This ensures it works even if redirected
+            const bucketUrl = window.location.origin + window.location.pathname.replace('index.html', '');
+            videoSource.src = bucketUrl + fileName; 
+            
+            videoPlayer.load();
+        } else {
+            videoTitle.textContent = "No file specified.";
+        }
+    </script>
+</body>
+</html>

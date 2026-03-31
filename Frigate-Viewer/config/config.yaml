@@ -1,6 +1,7 @@
 mqtt:
   enabled: True
-  host: hp-archlinux-laptop.lan
+#  host: tdevries-archlinux-ssd.lan
+  host: ${HOSTNAME}
   user: mqtt_user
   password: mqtt_password
 
