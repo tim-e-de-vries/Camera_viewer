@@ -1,7 +1,6 @@
 mqtt:
   enabled: True
-#  host: tdevries-archlinux-ssd.lan
-  host: ${HOSTNAME}
+  host: hp-archlinux-laptop.lan
   user: mqtt_user
   password: mqtt_password
 
@@ -51,7 +50,7 @@ cameras:
       enabled: true
       expire_interval: 60
       retain:
-        days: 0
+        days: 7
         mode: all
     snapshots:
       enabled: true
@@ -70,3 +69,4 @@ detect:
   enabled: true
 
 version: 0.16-0
+

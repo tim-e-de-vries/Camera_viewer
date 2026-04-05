@@ -1,0 +1,76 @@
+mqtt:
+  enabled: True
+#  host: mosquitto
+  host: hp-archlinux-laptop.lan
+  user: mqtt_user
+  password: mqtt_password
+
+detectors:
+  ov:
+    type: openvino
+    device: GPU
+
+model:
+  width: 300
+  height: 300
+  input_tensor: nhwc
+  input_pixel_format: bgr
+  path: /openvino-model/ssdlite_mobilenet_v2.xml
+  labelmap_path: /openvino-model/coco_91cl_bkgr.txt
+
+ffmpeg:
+  hwaccel_args: preset-rpi-64-h264
+
+go2rtc:
+  streams:
+    front_door:
+      - rtsp://admin:Amcrest2026@ipc.lan:554/cam/realmonitor?channel=1&subtype=0
+    front_door_sub:
+      - rtsp://admin:Amcrest2026@ipc.lan:554/cam/realmonitor?channel=1&subtype=1
+
+cameras:
+  front_door:
+    enabled: true
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/front_door_sub
+          roles:
+            - detect
+        - path: rtsp://127.0.0.1:8554/front_door
+          roles:
+            - record
+    detect:
+      width: 1280
+      height: 720
+      fps: 5
+    live:
+      streams:
+        sub: front_door_sub
+        main: front_door
+    record:
+      enabled: true
+      expire_interval: 60
+      retain:
+        days: 2
+        mode: all
+      events:
+        retain:
+          default: 7 
+          mode: active_objects
+    snapshots:
+      enabled: true
+      retain:
+        default: 30
+
+    zones: {}
+    motion:
+      mask: 0.003,0.005,0,0.233,0.598,0.126,0.98,0.131,0.916,0
+objects:
+  track:
+    - person
+    - car
+
+detect:
+  enabled: true
+
+version: 0.16-0
